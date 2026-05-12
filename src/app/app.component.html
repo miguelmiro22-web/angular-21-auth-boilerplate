@@ -1,0 +1,17 @@
+<nav *ngIf="account" class="navbar navbar-expand navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">Home</a>
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item"><a class="nav-link" routerLink="/profile">Profile</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/admin">Admin</a></li>
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" (click)="logout()">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+<router-outlet name="subnav"></router-outlet>
+<div class="app-container">
+  <alert></alert>
+  <router-outlet></router-outlet>
+</div>
