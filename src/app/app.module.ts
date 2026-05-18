@@ -22,13 +22,7 @@ import { HomeComponent } from './home/home.component';
     AlertComponent,
     HomeComponent
   ],
-  providers: [
-    { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    // Uncomment to enable the fake backend
-    fakeBackendProvider
-  ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
