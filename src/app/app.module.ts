@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
-import { JwtInterceptor, ErrorInterceptor, appInitializer, fakeBackendProvider } from './_helpers';
+import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers'; // ← removed fakeBackendProvider
 import { AccountService } from './_services';
 import { AppComponent } from './app.component';
 import { AlertComponent } from './_components';
@@ -22,7 +22,16 @@ import { HomeComponent } from './home/home.component';
     AlertComponent,
     HomeComponent
   ],
-
+  providers: [                                           // ← this entire block was missing
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializer,
+      deps: [AccountService],
+      multi: true
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
