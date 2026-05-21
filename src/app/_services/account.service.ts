@@ -17,7 +17,8 @@ export class AccountService {
     private router: Router,
     private http: HttpClient
   ) {
-    this.accountSubject = new BehaviorSubject<Account | null>(null);
+    const stored = localStorage.getItem('account');
+    this.accountSubject = new BehaviorSubject<Account | null>(stored ? JSON.parse(stored) : null);
     this.account = this.accountSubject.asObservable();
   }
 
@@ -28,6 +29,7 @@ export class AccountService {
   login(email: string, password: string) {
     return this.http.post<any>(`${baseUrl}/authenticate`, { email, password }, { withCredentials: true })
       .pipe(map(account => {
+        localStorage.setItem('account', JSON.stringify(account));
         this.accountSubject.next(account);
         this.startRefreshTokenTimer();
         return account;
@@ -37,6 +39,7 @@ export class AccountService {
   logout() {
     this.http.post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true }).subscribe();
     this.stopRefreshTokenTimer();
+    localStorage.removeItem('account');
     this.accountSubject.next(null);
     this.router.navigate(['/account/login']);
   }
